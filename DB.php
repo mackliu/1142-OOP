@@ -63,18 +63,46 @@ Class DB{
         // echo $sql;
         return $this->pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
     }
+
+    function update($array){
+        $sql="UPDATE $this->table ";
+        $tmp=[];
+        foreach($array as $key => $value){
+            //$tmp[]=sprintf("`%s`='%s'",$key,$value);
+            if($key!="id"){
+                $tmp[]="`$key`='$value'";
+            }
+        }
+        $sql .=" SET ".join(", ",$tmp);
+        $sql .=" WHERE id='{$array['id']}'";
+        //$sql .=" WHERE id='$id'";
+        
+        echo $sql;
+        return $this->pdo->exec($sql);
+    }
+
+
 }
 
 
 $daily=new DB('daily_account');
 $category=new DB('category');
-echo "<pre>";
-print_r($daily->all(['store'=>'7-11'], ' order by payment asc'));
-echo "</pre>";
+//echo "<pre>";
+//print_r($daily->all(['store'=>'7-11'], ' order by payment asc'));
+//echo "</pre>";
 
+//echo "<pre>";
+//print_r($daily->find(3));
+//echo "</pre>";
+//echo "<pre>";
+//print_r($category->find(3));
+//echo "</pre>";
+$row=$category->find(8);
 echo "<pre>";
-print_r($daily->find(3));
+print_r($row);
 echo "</pre>";
+$row['name']='大學';
 echo "<pre>";
-print_r($category->find(3));
+print_r($row);
 echo "</pre>";
+$category->update($row);
