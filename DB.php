@@ -44,11 +44,37 @@ Class DB{
         // echo $sql;
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    function find($id){
+        $sql="select * from `$this->table` ";
+                if(is_array($id)){
+                    //多條件
+                    $tmp=[];
+                    foreach($id as $key => $value){
+                        //$tmp[]=sprintf("`%s`='%s'",$key,$value);
+                        $tmp[]="`$key`='$value'";
+                    }
+                    $sql .= " where " . implode(" && ",$tmp);
+                }else{
+                    //單條件
+                    $sql .= " where `id`='$id' ";
+                }
+          
+        // echo $sql;
+        return $this->pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
+    }
 }
 
 
 $daily=new DB('daily_account');
-
+$category=new DB('category');
 echo "<pre>";
 print_r($daily->all(['store'=>'7-11'], ' order by payment asc'));
+echo "</pre>";
+
+echo "<pre>";
+print_r($daily->find(3));
+echo "</pre>";
+echo "<pre>";
+print_r($category->find(3));
 echo "</pre>";
