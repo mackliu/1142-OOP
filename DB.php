@@ -115,6 +115,15 @@ Class DB{
     }
 }
 
+function q($sql){
+    global $pdo;
+    return $pdo->query($sql)->fetchALL(PDO::FETCH_ASSOC);
+}
+
+
+function to($url){
+    header("location:".$url);
+}
 
 //$daily=new DB('daily_account');
 //$category=new DB('category');
