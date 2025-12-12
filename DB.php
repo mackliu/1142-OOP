@@ -38,16 +38,17 @@ Class DB{
                 }
             }
 
+            if(isset($arg[1])){
+                $sql .=$arg[1];
+            }
         // echo $sql;
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-
     }
-
 }
 
 
-$category=new DB('category');
+$daily=new DB('daily_account');
 
 echo "<pre>";
-print_r($category->all());
+print_r($daily->all(['store'=>'7-11'], ' order by payment asc'));
 echo "</pre>";
