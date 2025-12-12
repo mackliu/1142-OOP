@@ -26,11 +26,7 @@ Class DB{
             if(isset($arg[0])){
                 if(is_array($arg[0])){
                     //多條件
-                    $tmp=[];
-                    foreach($arg[0] as $key => $value){
-                        //$tmp[]=sprintf("`%s`='%s'",$key,$value);
-                        $tmp[]="`$key`='$value'";
-                    }
+                    $tmp=$this->arrayToSql($arg[0]);
                     $sql .= " where " . implode(" && ",$tmp);
                 }else{
                     //單條件
@@ -49,11 +45,7 @@ Class DB{
         $sql="select * from `$this->table` ";
                 if(is_array($id)){
                     //多條件
-                    $tmp=[];
-                    foreach($id as $key => $value){
-                        //$tmp[]=sprintf("`%s`='%s'",$key,$value);
-                        $tmp[]="`$key`='$value'";
-                    }
+                    $tmp=$this->arrayToSql($id);
                     $sql .= " where " . implode(" && ",$tmp);
                 }else{
                     //單條件
@@ -76,13 +68,7 @@ Class DB{
 
     function update($array){
         $sql="UPDATE $this->table ";
-        $tmp=[];
-        foreach($array as $key => $value){
-            //$tmp[]=sprintf("`%s`='%s'",$key,$value);
-            if($key!="id"){
-                $tmp[]="`$key`='$value'";
-            }
-        }
+        $tmp=$this->arrayToSql($array);
         $sql .=" SET ".join(", ",$tmp);
         $sql .=" WHERE id='{$array['id']}'";
         //$sql .=" WHERE id='$id'";
@@ -103,12 +89,35 @@ Class DB{
 
     }
 
+    function delete($id){
+        $sql="DELETE from `$this->table` ";
+                if(is_array($id)){
+                    //多條件
+                    $tmp=$this->arrayToSql($id);
+                    $sql .= " where " . implode(" && ",$tmp);
+                }else{
+                    //單條件
+                    $sql .= " where `id`='$id' ";
+                }
+          
+        echo $sql;
+        return $this->pdo->exec($sql);
+    }
 
+
+    private function arrayToSql($array){
+        $tmp=[];
+        foreach($array as $key => $value){
+            $tmp[]="`$key`='$value'";
+        }
+
+        return $tmp;
+    }
 }
 
 
-$daily=new DB('daily_account');
-$category=new DB('category');
+//$daily=new DB('daily_account');
+//$category=new DB('category');
 //echo "<pre>";
 //print_r($daily->all(['store'=>'7-11'], ' order by payment asc'));
 //echo "</pre>";
@@ -129,4 +138,4 @@ $category=new DB('category');
 //echo "</pre>";
 //$category->update($row);
 
-$category->save(['id'=>'6','name'=>'休息']);
+//$category->save(['name'=>'出差']);
