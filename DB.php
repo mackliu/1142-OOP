@@ -81,6 +81,18 @@ Class DB{
         return $this->pdo->exec($sql);
     }
 
+    function insert($array){
+
+        $sql="INSERT INTO `{$this->table}` ";
+        $keys=array_keys($array);
+        $sql .="(`". join("`,`",$keys). "`)";
+        $sql .=" VALUES ('". join("','",$array). "')";
+        echo $sql;
+        //echo "<hr>";
+        return $this->pdo->exec($sql);
+
+    }
+
 
 }
 
@@ -97,12 +109,14 @@ $category=new DB('category');
 //echo "<pre>";
 //print_r($category->find(3));
 //echo "</pre>";
-$row=$category->find(8);
-echo "<pre>";
-print_r($row);
-echo "</pre>";
-$row['name']='大學';
-echo "<pre>";
-print_r($row);
-echo "</pre>";
-$category->update($row);
+//$row=$category->find(8);
+//echo "<pre>";
+//print_r($row);
+//echo "</pre>";
+//$row['name']='大學';
+//echo "<pre>";
+//print_r($row);
+//echo "</pre>";
+//$category->update($row);
+
+$category->insert(['name'=>'電影']);
