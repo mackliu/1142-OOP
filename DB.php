@@ -22,11 +22,23 @@ Class DB{
     public function all(...$arg){
 
         $sql="select * from `$this->table` ";
-        if(!empty($arg)){
+        
+            if(isset($arg[0])){
+                if(is_array($arg[0])){
+                    //多條件
+                    $tmp=[];
+                    foreach($arg[0] as $key => $value){
+                        //$tmp[]=sprintf("`%s`='%s'",$key,$value);
+                        $tmp[]="`$key`='$value'";
+                    }
+                    $sql .= " where " . implode(" && ",$tmp);
+                }else{
+                    //單條件
+                    $sql .=$arg[0];
+                }
+            }
 
-        }
-
-        echo $sql;
+        // echo $sql;
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
     }
