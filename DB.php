@@ -64,6 +64,16 @@ Class DB{
         return $this->pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
     }
 
+    function save($array){
+        if(isset($array['id'])){
+            $this->update($array);
+        }else{
+            $this->insert($array);
+        }
+
+    }
+
+
     function update($array){
         $sql="UPDATE $this->table ";
         $tmp=[];
@@ -119,4 +129,4 @@ $category=new DB('category');
 //echo "</pre>";
 //$category->update($row);
 
-$category->insert(['name'=>'電影']);
+$category->save(['id'=>'6','name'=>'休息']);
